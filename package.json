@@ -1,0 +1,31 @@
+{
+  "name": "tabulous",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tiled overview of every open Chrome tab, with previews, tab groups, sorting and tab management.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "release": "npm run lint && npm run screenshots && rm -f dist.zip && cd dist && zip -rq ../dist.zip . && cd .. && node scripts/verify-release.mjs",
+    "screenshots": "node scripts/generate-store-screenshots.mjs",
+    "screenshots:setup": "playwright install chromium",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.23",
+    "@types/chrome": "^0.0.268",
+    "@typescript-eslint/eslint-plugin": "^7.16.0",
+    "@typescript-eslint/parser": "^7.16.0",
+    "eslint": "^8.57.0",
+    "playwright": "^1.63.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true
+  }
+}

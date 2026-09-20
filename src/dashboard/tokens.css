@@ -1,0 +1,152 @@
+:root {
+  color-scheme: light dark;
+
+  --font-system:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Inter, system-ui, sans-serif;
+
+  --size-title: 13px;
+  --size-meta: 11px;
+  --size-label: 12px;
+  --weight-title: 500;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 28px;
+  --space-7: 40px;
+
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-pill: 999px;
+
+  /* Shared height for toolbar-row controls (search, buttons, selects, icon button)
+     so they line up on one baseline instead of each following its own padding. */
+  --control-height: 28px;
+
+  --tile-min: 220px;
+  --tile-max: 300px;
+  --tile-body-height: 48px;
+
+  --duration-fast: 120ms;
+  --duration-base: 150ms;
+  --ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --group-grey: #5f6368;
+  --group-blue: #1a73e8;
+  --group-red: #d93025;
+  --group-yellow: #f9ab00;
+  --group-green: #1e8e3e;
+  --group-pink: #d01884;
+  --group-purple: #9334e6;
+  --group-cyan: #007b83;
+  --group-orange: #fa903e;
+}
+
+/* Light appearance */
+:root,
+:root[data-theme='light'] {
+  --bg-app: #f5f5f7;
+  --bg-elevated: #ffffff;
+  --bg-toolbar: rgba(245, 245, 247, 0.72);
+  --bg-subtle: rgba(0, 0, 0, 0.04);
+  --bg-subtle-strong: rgba(0, 0, 0, 0.08);
+  --bg-preview: #ececf0;
+
+  --text-primary: #1d1d1f;
+  --text-secondary: rgba(60, 60, 67, 0.6);
+  --text-inverse: #ffffff;
+
+  --hairline: rgba(0, 0, 0, 0.1);
+  --hairline-strong: rgba(0, 0, 0, 0.16);
+
+  --accent: #0071e3;
+  --accent-soft: rgba(0, 113, 227, 0.14);
+  --danger: #d70015;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.08), 0 12px 28px rgba(0, 0, 0, 0.12);
+  --shadow-popover: 0 8px 32px rgba(0, 0, 0, 0.16);
+
+  /* Favicons assume a light backdrop; give them a fixed near-white chip so icons with
+     light or transparent artwork stay legible against both light and dark tile bodies. */
+  --favicon-bg: #ffffff;
+  --favicon-border: rgba(0, 0, 0, 0.12);
+}
+
+/* Dark appearance */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg-app: #0b0b0c;
+    --bg-elevated: #1c1c1e;
+    --bg-toolbar: rgba(28, 28, 30, 0.72);
+    --bg-subtle: rgba(255, 255, 255, 0.07);
+    --bg-subtle-strong: rgba(255, 255, 255, 0.13);
+    --bg-preview: #2c2c2e;
+
+    --text-primary: #f5f5f7;
+    --text-secondary: rgba(235, 235, 245, 0.6);
+    --text-inverse: #1d1d1f;
+
+    --hairline: rgba(255, 255, 255, 0.12);
+    --hairline-strong: rgba(255, 255, 255, 0.2);
+
+    --accent: #0a84ff;
+    --accent-soft: rgba(10, 132, 255, 0.22);
+    --danger: #ff453a;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --shadow-popover: 0 8px 32px rgba(0, 0, 0, 0.7);
+
+    /* Slightly dimmer than pure white so the chip doesn't glare against dark tiles,
+       with a darker border (rather than a light hairline) so it still reads as a
+       distinct chip instead of blending into the icon's own white padding. */
+    --favicon-bg: #e8e8ea;
+    --favicon-border: rgba(0, 0, 0, 0.35);
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg-app: #0b0b0c;
+  --bg-elevated: #1c1c1e;
+  --bg-toolbar: rgba(28, 28, 30, 0.72);
+  --bg-subtle: rgba(255, 255, 255, 0.07);
+  --bg-subtle-strong: rgba(255, 255, 255, 0.13);
+  --bg-preview: #2c2c2e;
+
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(235, 235, 245, 0.6);
+  --text-inverse: #1d1d1f;
+
+  --hairline: rgba(255, 255, 255, 0.12);
+  --hairline-strong: rgba(255, 255, 255, 0.2);
+
+  --accent: #0a84ff;
+  --accent-soft: rgba(10, 132, 255, 0.22);
+  --danger: #ff453a;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-popover: 0 8px 32px rgba(0, 0, 0, 0.7);
+
+  --favicon-bg: #e8e8ea;
+  --favicon-border: rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

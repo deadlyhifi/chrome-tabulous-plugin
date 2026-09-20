@@ -1,0 +1,19 @@
+import { defineConfig } from 'vite';
+import { crx } from '@crxjs/vite-plugin';
+import manifest from './manifest.json';
+
+export default defineConfig({
+  plugins: [crx({ manifest: manifest as never })],
+  build: {
+    target: 'esnext',
+    rollupOptions: {
+      input: {
+        dashboard: 'src/dashboard/index.html',
+      },
+    },
+  },
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
+});
