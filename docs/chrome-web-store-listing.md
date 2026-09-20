@@ -1,6 +1,6 @@
 # Chrome Web Store Submission
 
-Use this sheet when completing the Chrome Web Store Developer Dashboard for version 1.0.0.
+Use this sheet when completing the Chrome Web Store Developer Dashboard for version 1.0.1.
 
 ## Product Details
 
@@ -91,5 +91,5 @@ No account, payment, external service, or test credentials are required.
 - Verify the project domain in Search Console if displaying an official publisher URL.
 - Search the Chrome Web Store and relevant trademark databases for conflicts with “Tabulous.”
 - Upload `dist.zip`, complete every Privacy field, and use deferred publishing for final review.
-- After approval, tag the exact submitted commit, for example `git tag v1.0.0`, and retain the matching `dist.zip`. Do not create the tag until the release commit is final.
+- After approval, tag the exact submitted commit, for example `git tag v1.0.1`, and retain the matching `dist.zip`. Do not create the tag until the release commit is final.
 - Increment both `manifest.json` and `package.json` before every later upload.

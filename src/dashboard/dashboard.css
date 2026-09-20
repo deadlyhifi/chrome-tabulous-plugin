@@ -928,9 +928,7 @@ select {
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  transition:
-    background var(--duration-fast) var(--ease-standard),
-    rotate var(--duration-base) var(--ease-standard);
+  transition: background var(--duration-fast) var(--ease-standard);
 }
 
 .tile__disclosure:hover {
@@ -940,10 +938,11 @@ select {
 .tile__disclosure svg {
   width: 10px;
   height: 10px;
+  transition: transform var(--duration-base) var(--ease-standard);
 }
 
-.tile__disclosure[aria-expanded='true'] {
-  rotate: 180deg;
+.tile__disclosure[aria-expanded='true'] svg {
+  transform: rotate(180deg);
 }
 
 .group-chip {
