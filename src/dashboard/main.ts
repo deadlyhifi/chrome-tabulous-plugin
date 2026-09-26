@@ -655,6 +655,7 @@ function windowLabel(windowId: number, incognito: boolean, focused: boolean): st
 function render(): void {
   const scrollY = window.scrollY;
   board.textContent = '';
+  board.dataset.selecting = String(state.selected.size > 0);
 
   const tiles = sortTiles(visibleTiles(), state.prefs, state.memory);
   const total = state.snapshot.tiles.length;
@@ -970,6 +971,14 @@ board.addEventListener('click', (event) => {
   if (action === 'close') {
     event.stopPropagation();
     void closeTabs([tabId]);
+    return;
+  }
+  if (action === 'toggle-select') {
+    event.stopPropagation();
+    if (state.selected.has(tabId)) state.selected.delete(tabId);
+    else state.selected.add(tabId);
+    state.lastClickedId = tabId;
+    render();
     return;
   }
   if (action === 'pin') {

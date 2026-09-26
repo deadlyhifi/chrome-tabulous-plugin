@@ -853,6 +853,47 @@ select {
   color: #fff;
 }
 
+/* Square rather than round, so it reads as a checkbox rather than another status badge.
+   Faint until hovered/focused, but the whole board lights every tile's box up as soon as
+   one is selected, so multi-select stays legible while it's in use. */
+.tile__select {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.3);
+  color: transparent;
+  opacity: 0;
+  cursor: pointer;
+  transition:
+    opacity var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+.tile__select svg {
+  width: 11px;
+  height: 11px;
+}
+.tile:hover .tile__select,
+.tile:focus-within .tile__select,
+.board[data-selecting='true'] .tile__select {
+  opacity: 1;
+}
+.tile__select:hover,
+.tile__select:focus-visible {
+  background: rgba(0, 0, 0, 0.55);
+}
+.tile__select[aria-pressed='true'] {
+  opacity: 1;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
 /* A passive drop target (not a button): faint until the tile is hovered, and highlighted
    while a single dragged tab is poised over it to form a Split View. */
 .tile__split-target {

@@ -16,6 +16,9 @@ const ICON_MUTED =
 const ICON_PIN =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M9.5.9a1.5 1.5 0 0 1 2.12 0l3.48 3.48a1.5 1.5 0 0 1 0 2.12l-.7.71a1.5 1.5 0 0 1-1.73.28l-1.9 1.9.2 2.46a1.5 1.5 0 0 1-2.55 1.18L5.8 10.9l-3.7 3.7a.75.75 0 1 1-1.06-1.06l3.7-3.7-2.13-2.13a1.5 1.5 0 0 1 1.18-2.55l2.46.2 1.9-1.9a1.5 1.5 0 0 1 .28-1.73z"/></svg>';
 
+const ICON_CHECK =
+  '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M13.7 3.9a1 1 0 0 1 0 1.4l-6.5 6.9a1 1 0 0 1-1.45.02L2.3 8.68a1 1 0 1 1 1.4-1.42l2.72 2.66 5.8-6.14a1 1 0 0 1 1.42.12"/></svg>';
+
 const ICON_SLEEP =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M13.4 9.6A5.6 5.6 0 0 1 6.4 2.6a.75.75 0 0 0-1-.9 7.1 7.1 0 1 0 8.9 8.9.75.75 0 0 0-.9-1"/></svg>';
 
@@ -174,6 +177,17 @@ function buildPreview(tile: TileModel, ctx: TileContext): HTMLElement {
 
   const badges = document.createElement('div');
   badges.className = 'tile__badges';
+
+  // A custom checkbox rather than a native input, so its faint/solid states can match
+  // the pin badge's hover affordance while staying obviously a checkbox, not a badge.
+  const select = document.createElement('button');
+  select.type = 'button';
+  select.className = 'tile__select';
+  select.dataset.action = 'toggle-select';
+  select.setAttribute('aria-pressed', String(ctx.selected));
+  select.setAttribute('aria-label', `${ctx.selected ? 'Deselect' : 'Select'} ${tile.title}`);
+  select.innerHTML = ICON_CHECK;
+  badges.append(select);
 
   // Pinned tabs always show the badge; unpinned tabs get a faint one that pins on click.
   const pin = document.createElement('button');
