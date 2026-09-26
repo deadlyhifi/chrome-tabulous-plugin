@@ -79,7 +79,7 @@ The Privacy URL will work publicly after `PRIVACY.md` is pushed to the default b
 2. The dashboard immediately lists tabs across all normal Chrome windows. Search, sorting, activation, pinning, closing, moving, and tab-group controls work without optional access.
 3. Click **Enable** in the preview disclosure to grant optional site access. Visit a normal web page, then return to Tabulous to see its locally cached preview. Chrome internal pages, the Chrome Web Store, and PDF viewer pages intentionally use fallback cards.
 4. Memory and CPU details require the optional `processes` permission and a Chrome Dev or Canary channel. Stable Chrome reports that this feature is unavailable.
-5. Split View controls appear only on Chrome 155 or newer because earlier versions do not expose the required API.
+5. Split View pairing and unsplitting require Chrome 155 or newer. On earlier versions, an already-linked pair still renders as a combined tile with a working swap control; its unsplit button is disabled.
 
 No account, payment, external service, or test credentials are required.
 

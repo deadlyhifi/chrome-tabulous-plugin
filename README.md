@@ -40,12 +40,14 @@ automatic light and dark appearance.
   Chrome's native window order. Chrome's own group state stays authoritative throughout.
 - **Drag and drop** to reorder tabs, move them between windows, and move them into or out of
   a tab group by dropping on a group's section or the ungrouped grid.
-- **Split View** — requires Chrome 155+. Two tabs already paired into a Chrome Split View
-  render as one combined tile in the grid, with a button on each pane to jump to that tab, a
-  swap-sides control, and an unsplit button. To create a new pair, drag one tab onto the
-  small split icon that appears on another tile's badges; Tabulous lines the tabs up and pairs
-  them for you. Split View has no orientation or ratio control exposed to extensions yet, so
-  Tabulous can't offer a vertical/horizontal toggle.
+- **Split View** — pairing new tabs and unsplitting require Chrome 155+, but two tabs already
+  linked into a Chrome Split View render as one combined tile in the grid on any Chrome version,
+  with a button on each pane to jump to that tab and a swap-sides control. The unsplit button is
+  disabled on older Chrome versions that report a linked pair without yet exposing the API to
+  separate it. To create a new pair, drag one tab onto the small split icon that appears on
+  another tile's badges; Tabulous lines the tabs up and pairs them for you. Split View has no
+  orientation or ratio control exposed to extensions yet, so Tabulous can't offer a
+  vertical/horizontal toggle.
 - **Expandable details** per tab, opened from the chevron on each card. The panel is a
   non-modal popover anchored to its tile and drawn in the top layer, so opening it never
   reflows the grid. It shows how long the tab has been open, when it was last used, the full

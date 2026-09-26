@@ -27,16 +27,16 @@ export const ICON_SPLIT =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2 2.5A1.5 1.5 0 0 1 3.5 1h3A1.5 1.5 0 0 1 8 2.5v11A1.5 1.5 0 0 1 6.5 15h-3A1.5 1.5 0 0 1 2 13.5zm7 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v11a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z"/></svg>';
 
 export const ICON_SWAP =
-  '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4.47 1.22a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 0 1-1.06 1.06L5.75 3.56V11a.75.75 0 0 1-1.5 0V3.56L3.03 4.78a.75.75 0 0 1-1.06-1.06zm7.06 13.56a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 1 1 1.06-1.06l1.22 1.22V5a.75.75 0 0 1 1.5 0v7.44l1.22-1.22a.75.75 0 1 1 1.06 1.06z"/></svg>';
+  '<svg viewBox="0 0 16 16" aria-hidden="true"><g transform="rotate(90 8 8)"><path fill="currentColor" d="M4.47 1.22a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 0 1-1.06 1.06L5.75 3.56V11a.75.75 0 0 1-1.5 0V3.56L3.03 4.78a.75.75 0 0 1-1.06-1.06zm7.06 13.56a.75.75 0 0 1-1.06 0l-2.5-2.5a.75.75 0 1 1 1.06-1.06l1.22 1.22V5a.75.75 0 0 1 1.5 0v7.44l1.22-1.22a.75.75 0 1 1 1.06 1.06z"/></g></svg>';
 
 export const ICON_UNSPLIT =
   '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2 2.5A1.5 1.5 0 0 1 3.5 1h2A1.5 1.5 0 0 1 7 2.5v3.75a.75.75 0 0 1-1.5 0V2.5h-2v11h2V9.75a.75.75 0 0 1 1.5 0v2.75A1.5 1.5 0 0 1 5.5 14h-2A1.5 1.5 0 0 1 2 12.5zm11.03-.28a.75.75 0 0 1 0 1.06L11.31 5H13a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1-.75-.75V2.25a.75.75 0 0 1 1.5 0v1.69l1.72-1.72a.75.75 0 0 1 1.06 0m0 10.56a.75.75 0 0 0 0-1.06L11.31 9.5H13a.75.75 0 0 0 0-1.5h-3.5a.75.75 0 0 0-.75.75v3.5a.75.75 0 0 0 1.5 0v-1.69l1.72 1.72a.75.75 0 0 0 1.06 0"/></svg>';
 
 /**
- * Chrome only exposes Split View creation/unsplit APIs from Chrome 155 onward. Older
- * browsers still report `tab.splitViewId`-free tabs, but calling the control methods
- * throws, so gate the split UI entirely on their presence rather than showing controls
- * that silently fail.
+ * Chrome only exposes Split View creation/unsplit APIs from Chrome 155 onward. A tab can
+ * still report a `splitViewId` on older builds, so this only gates the controls that call
+ * those methods (pairing new tabs, unsplitting) rather than whether an already-linked pair
+ * displays as a combined tile.
  */
 export function isSplitViewSupported(): boolean {
   return typeof chrome.tabs.createSplit === 'function' && typeof chrome.tabs.unsplit === 'function';

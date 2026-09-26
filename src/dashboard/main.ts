@@ -244,7 +244,7 @@ function appendTilesWithSplitPairs(
   const rendered = new Set<number>();
   for (const tile of tiles) {
     if (rendered.has(tile.id)) continue;
-    if (tile.splitViewId !== undefined && isSplitViewSupported()) {
+    if (tile.splitViewId !== undefined) {
       const partner = tiles.find(
         (candidate) => candidate.id !== tile.id && candidate.splitViewId === tile.splitViewId,
       );
@@ -310,9 +310,15 @@ function buildSplitTile(a: TileModel, b: TileModel, draggable: boolean): HTMLLIE
   unsplit.className = 'split-tile__action';
   unsplit.dataset.action = 'unsplit';
   unsplit.dataset.splitViewId = String(a.splitViewId);
-  unsplit.title = 'Unsplit';
   unsplit.setAttribute('aria-label', 'Separate split view into two tabs');
   unsplit.innerHTML = ICON_UNSPLIT;
+  // Chrome may report an already-linked pair before it ships the API to unsplit it.
+  if (isSplitViewSupported()) {
+    unsplit.title = 'Unsplit';
+  } else {
+    unsplit.disabled = true;
+    unsplit.title = 'Unsplit requires a newer Chrome version';
+  }
   body.append(unsplit);
 
   item.append(body);
@@ -750,7 +756,7 @@ function render(): void {
       for (const tile of windowTiles) {
         if (renderedTiles.has(tile.id)) continue;
         if (!tile.group) {
-          if (tile.splitViewId !== undefined && isSplitViewSupported()) {
+          if (tile.splitViewId !== undefined) {
             const partner = ungroupedTiles.find(
               (candidate) => candidate.id !== tile.id && candidate.splitViewId === tile.splitViewId,
             );

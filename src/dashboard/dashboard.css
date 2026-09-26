@@ -689,6 +689,16 @@ select {
   color: var(--text-primary);
 }
 
+.split-tile__action:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.split-tile__action:disabled:hover {
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
 .tile__preview {
   position: relative;
   aspect-ratio: 4 / 3;
