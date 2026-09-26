@@ -73,14 +73,70 @@
           </select>
         </label>
 
-        <label class="select">
-          <span class="select__label">Theme</span>
-          <select id="theme" aria-label="Appearance">
-            <option value="system">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </label>
+        <div class="theme-control">
+          <label class="select">
+            <span class="select__label">Theme</span>
+            <select id="theme" aria-label="Appearance">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+          <button
+            type="button"
+            id="appearance-settings"
+            class="icon-button"
+            popovertarget="appearance-options"
+            aria-label="Appearance options"
+            title="Appearance options"
+          >
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                <line x1="2" y1="4" x2="14" y2="4" />
+                <line x1="2" y1="8" x2="14" y2="8" />
+                <line x1="2" y1="12" x2="14" y2="12" />
+              </g>
+              <circle cx="6" cy="4" r="1.6" fill="currentColor" />
+              <circle cx="10" cy="8" r="1.6" fill="currentColor" />
+              <circle cx="7" cy="12" r="1.6" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+
+        <div id="appearance-options" class="appearance-popover" popover="auto" aria-label="Appearance options">
+          <label class="appearance-popover__field" id="light-variant-field">
+            <span>Light style</span>
+            <select id="light-variant" aria-label="Light appearance style">
+              <option value="brightest">Brightest</option>
+              <option value="soft">Soft</option>
+              <option value="softer">Softer</option>
+              <option value="softest">Softest</option>
+            </select>
+          </label>
+
+          <label class="appearance-popover__field" id="dark-variant-field">
+            <span>Dark style</span>
+            <select id="dark-variant" aria-label="Dark appearance style">
+              <option value="darkest">Darkest</option>
+              <option value="dim">Dim</option>
+              <option value="dimmer">Dimmer</option>
+              <option value="dimmest">Dimmest</option>
+            </select>
+          </label>
+
+          <label class="appearance-popover__field">
+            <span>Tint</span>
+            <select id="tint" aria-label="Accent tint">
+              <option value="blue">Blue</option>
+              <option value="purple">Purple</option>
+              <option value="pink">Pink</option>
+              <option value="orange">Orange</option>
+              <option value="green">Green</option>
+              <option value="red">Red</option>
+              <option value="teal">Teal</option>
+            </select>
+          </label>
+        </div>
       </div>
 
       <div class="permission-bar" id="permission-bar" hidden>

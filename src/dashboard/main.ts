@@ -4,13 +4,16 @@ import { isReorderable, matchesFilter, sortTiles } from '../lib/sorting';
 import { loadPreferences, onPreferencesChanged, savePreferences } from '../lib/storage';
 import { collectSnapshot } from '../lib/tabs';
 import { getAllThumbnails } from '../lib/thumbnail-store';
-import { NO_GROUP } from '../lib/types';
+import { NO_GROUP, DEFAULT_PREFERENCES } from '../lib/types';
 import type {
+  DarkVariant,
+  LightVariant,
   MemoryAvailability,
   Preferences,
   SortKey,
   TabGroupInfo,
   TabMemory,
+  Tint,
   TileModel,
   TileSnapshot,
 } from '../lib/types';
@@ -35,6 +38,13 @@ const tabCountLabel = document.getElementById('tab-count') as HTMLElement;
 const filterInput = document.getElementById('filter') as HTMLInputElement;
 const sortKeySelect = document.getElementById('sort-key') as HTMLSelectElement;
 const themeSelect = document.getElementById('theme') as HTMLSelectElement;
+const appearanceButton = document.getElementById('appearance-settings') as HTMLButtonElement;
+const appearancePopover = document.getElementById('appearance-options') as HTMLElement;
+const lightVariantField = document.getElementById('light-variant-field') as HTMLElement;
+const lightVariantSelect = document.getElementById('light-variant') as HTMLSelectElement;
+const darkVariantField = document.getElementById('dark-variant-field') as HTMLElement;
+const darkVariantSelect = document.getElementById('dark-variant') as HTMLSelectElement;
+const tintSelect = document.getElementById('tint') as HTMLSelectElement;
 const bulkBar = document.getElementById('bulk-bar') as HTMLElement;
 const bulkCount = document.getElementById('bulk-count') as HTMLElement;
 const bulkSplitButton = document.getElementById('bulk-split') as HTMLButtonElement;
@@ -63,7 +73,7 @@ interface State {
 }
 
 const state: State = {
-  prefs: { theme: 'system', sortKey: 'window' },
+  prefs: { ...DEFAULT_PREFERENCES },
   snapshot: { tiles: [], windows: [], groups: {} },
   thumbnails: new Map(),
   memory: new Map(),
@@ -826,12 +836,42 @@ function renderBulkBar(): void {
 
 /* ---------------- Preferences ---------------- */
 
+// System OS scheme, needed only to resolve whether "System" theme currently renders dark.
+const prefersDarkMedia = window.matchMedia('(prefers-color-scheme: dark)');
+
+function isEffectivelyDark(prefs: Preferences): boolean {
+  return prefs.theme === 'dark' || (prefs.theme === 'system' && prefersDarkMedia.matches);
+}
+
+if (SUPPORTS_ANCHOR) {
+  appearanceButton.style.setProperty('anchor-name', '--appearance-anchor');
+  appearancePopover.style.setProperty('position-anchor', '--appearance-anchor');
+}
+appearancePopover.addEventListener('beforetoggle', (event) => {
+  if ((event as ToggleEvent).newState !== 'open') return;
+  if (!SUPPORTS_ANCHOR) positionWithoutAnchor(appearancePopover, appearanceButton);
+});
+prefersDarkMedia.addEventListener('change', () => {
+  const dark = isEffectivelyDark(state.prefs);
+  darkVariantField.hidden = !dark;
+  lightVariantField.hidden = dark;
+});
+
 function applyPreferences(prefs: Preferences): void {
   state.prefs = prefs;
   if (prefs.theme === 'system') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.dataset.theme = prefs.theme;
+  document.documentElement.dataset.darkVariant = prefs.darkVariant;
+  document.documentElement.dataset.lightVariant = prefs.lightVariant;
+  document.documentElement.dataset.tint = prefs.tint;
 
+  const dark = isEffectivelyDark(prefs);
   themeSelect.value = prefs.theme;
+  darkVariantField.hidden = !dark;
+  darkVariantSelect.value = prefs.darkVariant;
+  lightVariantField.hidden = dark;
+  lightVariantSelect.value = prefs.lightVariant;
+  tintSelect.value = prefs.tint;
   sortKeySelect.value = prefs.sortKey;
 }
 
@@ -1534,6 +1574,18 @@ sortKeySelect.addEventListener('change', () => {
 
 themeSelect.addEventListener('change', () => {
   void updatePreferences({ theme: themeSelect.value as Preferences['theme'] });
+});
+
+darkVariantSelect.addEventListener('change', () => {
+  void updatePreferences({ darkVariant: darkVariantSelect.value as DarkVariant });
+});
+
+lightVariantSelect.addEventListener('change', () => {
+  void updatePreferences({ lightVariant: lightVariantSelect.value as LightVariant });
+});
+
+tintSelect.addEventListener('change', () => {
+  void updatePreferences({ tint: tintSelect.value as Tint });
 });
 
 document.addEventListener('keydown', (event) => {

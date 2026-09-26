@@ -181,6 +181,70 @@ select {
   cursor: pointer;
 }
 
+/* Glues the appearance-options button to the end of the theme dropdown, so the popover
+   it opens reads as an extension of that control rather than an unrelated toolbar item. */
+.theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.appearance-popover {
+  display: none;
+  position: absolute;
+  inset: auto;
+  width: max-content;
+  min-width: 160px;
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-card);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-popover);
+}
+
+.appearance-popover:popover-open {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.appearance-popover::backdrop {
+  background: transparent;
+}
+
+@supports (anchor-name: --a) {
+  .appearance-popover {
+    margin-block-start: var(--space-1);
+    position-area: block-end span-inline-end;
+    position-try-fallbacks:
+      block-start span-inline-end,
+      block-end span-inline-start,
+      block-start span-inline-start;
+    position-visibility: anchors-visible;
+  }
+}
+
+.appearance-popover__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--size-meta);
+  color: var(--text-secondary);
+}
+
+.appearance-popover__field select {
+  height: var(--control-height);
+  padding-block: 0;
+  padding-inline: var(--space-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-control);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-size: var(--size-label);
+  cursor: pointer;
+}
+
 .icon-button {
   display: inline-grid;
   place-items: center;

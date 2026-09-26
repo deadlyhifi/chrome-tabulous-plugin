@@ -42,6 +42,55 @@
   --group-purple: #9334e6;
   --group-cyan: #007b83;
   --group-orange: #fa903e;
+
+  /* Default (Blue) tint. Other tints override these via [data-tint]; the light/dark
+     blocks below read through them so the same tint applies in either appearance. */
+  --accent-light: #0071e3;
+  --accent-soft-light: rgba(0, 113, 227, 0.14);
+  --accent-dark: #0a84ff;
+  --accent-soft-dark: rgba(10, 132, 255, 0.22);
+}
+
+:root[data-tint='purple'] {
+  --accent-light: #af52de;
+  --accent-soft-light: rgba(175, 82, 222, 0.14);
+  --accent-dark: #bf5af2;
+  --accent-soft-dark: rgba(191, 90, 242, 0.22);
+}
+
+:root[data-tint='pink'] {
+  --accent-light: #ff2d55;
+  --accent-soft-light: rgba(255, 45, 85, 0.14);
+  --accent-dark: #ff375f;
+  --accent-soft-dark: rgba(255, 55, 95, 0.22);
+}
+
+:root[data-tint='orange'] {
+  --accent-light: #ff9500;
+  --accent-soft-light: rgba(255, 149, 0, 0.14);
+  --accent-dark: #ff9f0a;
+  --accent-soft-dark: rgba(255, 159, 10, 0.22);
+}
+
+:root[data-tint='green'] {
+  --accent-light: #34c759;
+  --accent-soft-light: rgba(52, 199, 89, 0.14);
+  --accent-dark: #30d158;
+  --accent-soft-dark: rgba(48, 209, 88, 0.22);
+}
+
+:root[data-tint='red'] {
+  --accent-light: #ff3b30;
+  --accent-soft-light: rgba(255, 59, 48, 0.14);
+  --accent-dark: #ff453a;
+  --accent-soft-dark: rgba(255, 69, 58, 0.22);
+}
+
+:root[data-tint='teal'] {
+  --accent-light: #30b0c7;
+  --accent-soft-light: rgba(48, 176, 199, 0.14);
+  --accent-dark: #40c8e0;
+  --accent-soft-dark: rgba(64, 200, 224, 0.22);
 }
 
 /* Light appearance */
@@ -61,8 +110,8 @@
   --hairline: rgba(0, 0, 0, 0.1);
   --hairline-strong: rgba(0, 0, 0, 0.16);
 
-  --accent: #0071e3;
-  --accent-soft: rgba(0, 113, 227, 0.14);
+  --accent: var(--accent-light);
+  --accent-soft: var(--accent-soft-light);
   --danger: #d70015;
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -73,6 +122,65 @@
      light or transparent artwork stay legible against both light and dark tile bodies. */
   --favicon-bg: #ffffff;
   --favicon-border: rgba(0, 0, 0, 0.12);
+}
+
+/* Trades some contrast for a softer, less stark white backdrop. Gated on the light media
+   query (not just the theme attribute) so it never leaks into an explicit dark theme when
+   the OS itself is in light mode. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark'])[data-light-variant='soft'] {
+    --bg-app: #eeeeef;
+    --bg-elevated: #f7f7f8;
+    --bg-toolbar: rgba(238, 238, 239, 0.72);
+    --bg-subtle: rgba(0, 0, 0, 0.05);
+    --bg-subtle-strong: rgba(0, 0, 0, 0.09);
+    --bg-preview: #e4e4e6;
+  }
+
+  :root:not([data-theme='dark'])[data-light-variant='softer'] {
+    --bg-app: #e6e6e8;
+    --bg-elevated: #efeff0;
+    --bg-toolbar: rgba(230, 230, 232, 0.74);
+    --bg-subtle: rgba(0, 0, 0, 0.06);
+    --bg-subtle-strong: rgba(0, 0, 0, 0.1);
+    --bg-preview: #dcdcdf;
+  }
+
+  :root:not([data-theme='dark'])[data-light-variant='softest'] {
+    --bg-app: #dedee1;
+    --bg-elevated: #e7e7e9;
+    --bg-toolbar: rgba(222, 222, 225, 0.76);
+    --bg-subtle: rgba(0, 0, 0, 0.07);
+    --bg-subtle-strong: rgba(0, 0, 0, 0.11);
+    --bg-preview: #d3d3d7;
+  }
+}
+
+:root[data-theme='light'][data-light-variant='soft'] {
+  --bg-app: #eeeeef;
+  --bg-elevated: #f7f7f8;
+  --bg-toolbar: rgba(238, 238, 239, 0.72);
+  --bg-subtle: rgba(0, 0, 0, 0.05);
+  --bg-subtle-strong: rgba(0, 0, 0, 0.09);
+  --bg-preview: #e4e4e6;
+}
+
+:root[data-theme='light'][data-light-variant='softer'] {
+  --bg-app: #e6e6e8;
+  --bg-elevated: #efeff0;
+  --bg-toolbar: rgba(230, 230, 232, 0.74);
+  --bg-subtle: rgba(0, 0, 0, 0.06);
+  --bg-subtle-strong: rgba(0, 0, 0, 0.1);
+  --bg-preview: #dcdcdf;
+}
+
+:root[data-theme='light'][data-light-variant='softest'] {
+  --bg-app: #dedee1;
+  --bg-elevated: #e7e7e9;
+  --bg-toolbar: rgba(222, 222, 225, 0.76);
+  --bg-subtle: rgba(0, 0, 0, 0.07);
+  --bg-subtle-strong: rgba(0, 0, 0, 0.11);
+  --bg-preview: #d3d3d7;
 }
 
 /* Dark appearance */
@@ -92,8 +200,8 @@
     --hairline: rgba(255, 255, 255, 0.12);
     --hairline-strong: rgba(255, 255, 255, 0.2);
 
-    --accent: #0a84ff;
-    --accent-soft: rgba(10, 132, 255, 0.22);
+    --accent: var(--accent-dark);
+    --accent-soft: var(--accent-soft-dark);
     --danger: #ff453a;
 
     --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -105,6 +213,34 @@
        distinct chip instead of blending into the icon's own white padding. */
     --favicon-bg: #e8e8ea;
     --favicon-border: rgba(0, 0, 0, 0.35);
+  }
+
+  /* Trades some contrast for a lighter, less black backdrop. */
+  :root:not([data-theme='light'])[data-dark-variant='dim'] {
+    --bg-app: #17181a;
+    --bg-elevated: #232326;
+    --bg-toolbar: rgba(35, 35, 38, 0.72);
+    --bg-subtle: rgba(255, 255, 255, 0.09);
+    --bg-subtle-strong: rgba(255, 255, 255, 0.15);
+    --bg-preview: #313134;
+  }
+
+  :root:not([data-theme='light'])[data-dark-variant='dimmer'] {
+    --bg-app: #232427;
+    --bg-elevated: #2d2e31;
+    --bg-toolbar: rgba(45, 46, 49, 0.72);
+    --bg-subtle: rgba(255, 255, 255, 0.1);
+    --bg-subtle-strong: rgba(255, 255, 255, 0.16);
+    --bg-preview: #3a3b3f;
+  }
+
+  :root:not([data-theme='light'])[data-dark-variant='dimmest'] {
+    --bg-app: #2f3033;
+    --bg-elevated: #38393c;
+    --bg-toolbar: rgba(56, 57, 60, 0.74);
+    --bg-subtle: rgba(255, 255, 255, 0.11);
+    --bg-subtle-strong: rgba(255, 255, 255, 0.17);
+    --bg-preview: #45464a;
   }
 }
 
@@ -123,8 +259,8 @@
   --hairline: rgba(255, 255, 255, 0.12);
   --hairline-strong: rgba(255, 255, 255, 0.2);
 
-  --accent: #0a84ff;
-  --accent-soft: rgba(10, 132, 255, 0.22);
+  --accent: var(--accent-dark);
+  --accent-soft: var(--accent-soft-dark);
   --danger: #ff453a;
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -133,6 +269,33 @@
 
   --favicon-bg: #e8e8ea;
   --favicon-border: rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme='dark'][data-dark-variant='dim'] {
+  --bg-app: #17181a;
+  --bg-elevated: #232326;
+  --bg-toolbar: rgba(35, 35, 38, 0.72);
+  --bg-subtle: rgba(255, 255, 255, 0.09);
+  --bg-subtle-strong: rgba(255, 255, 255, 0.15);
+  --bg-preview: #313134;
+}
+
+:root[data-theme='dark'][data-dark-variant='dimmer'] {
+  --bg-app: #232427;
+  --bg-elevated: #2d2e31;
+  --bg-toolbar: rgba(45, 46, 49, 0.72);
+  --bg-subtle: rgba(255, 255, 255, 0.1);
+  --bg-subtle-strong: rgba(255, 255, 255, 0.16);
+  --bg-preview: #3a3b3f;
+}
+
+:root[data-theme='dark'][data-dark-variant='dimmest'] {
+  --bg-app: #2f3033;
+  --bg-elevated: #38393c;
+  --bg-toolbar: rgba(56, 57, 60, 0.74);
+  --bg-subtle: rgba(255, 255, 255, 0.11);
+  --bg-subtle-strong: rgba(255, 255, 255, 0.17);
+  --bg-preview: #45464a;
 }
 
 @media (prefers-reduced-motion: reduce) {

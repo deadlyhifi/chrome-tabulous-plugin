@@ -1,14 +1,28 @@
 export type ThemePreference = 'system' | 'light' | 'dark';
 
+/** 'dim' trades some of dark mode's contrast for a lighter, less black backdrop. */
+export type DarkVariant = 'darkest' | 'dim' | 'dimmer' | 'dimmest';
+
+/** 'soft' trades some of light mode's contrast for a less stark white backdrop. */
+export type LightVariant = 'brightest' | 'soft' | 'softer' | 'softest';
+
+export type Tint = 'blue' | 'purple' | 'pink' | 'orange' | 'green' | 'red' | 'teal';
+
 export type SortKey = 'window' | 'recent' | 'age' | 'title' | 'domain' | 'memory' | 'group';
 
 export interface Preferences {
   theme: ThemePreference;
+  darkVariant: DarkVariant;
+  lightVariant: LightVariant;
+  tint: Tint;
   sortKey: SortKey;
 }
 
 export const DEFAULT_PREFERENCES: Preferences = {
   theme: 'system',
+  darkVariant: 'darkest',
+  lightVariant: 'brightest',
+  tint: 'blue',
   sortKey: 'window',
 };
 
