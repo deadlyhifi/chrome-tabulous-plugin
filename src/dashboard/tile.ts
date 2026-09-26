@@ -1,5 +1,6 @@
 import { formatAbsolute, formatBytes, formatDuration } from '../lib/tabs';
 import type { MemoryAvailability, TabMemory, TileModel } from '../lib/types';
+import logoMarkUrl from '../assets/logo-mark.png';
 
 const ICON_CLOSE =
   '<svg viewBox="0 0 10 10" aria-hidden="true"><path fill="currentColor" d="M1.3.24 5 3.94 8.7.24a.75.75 0 0 1 1.06 1.06L6.06 5l3.7 3.7A.75.75 0 0 1 8.7 9.76L5 6.06l-3.7 3.7A.75.75 0 0 1 .24 8.7L3.94 5 .24 1.3A.75.75 0 0 1 1.3.24"/></svg>';
@@ -119,7 +120,8 @@ export function positionWithoutAnchor(popover: HTMLElement, anchorEl: HTMLElemen
 }
 
 export function faviconUrl(tile: TileModel): string {
-  if (tile.isDashboard) return chrome.runtime.getURL('src/assets/icon-32.png');
+  // Reuse the plain mark, not the bordered manifest icon: `.tile__favicon` already frames it.
+  if (tile.isDashboard) return logoMarkUrl;
   if (tile.favIconUrl && !tile.favIconUrl.startsWith('chrome://')) return tile.favIconUrl;
   const url = new URL(chrome.runtime.getURL('/_favicon/'));
   url.searchParams.set('pageUrl', tile.url);
@@ -132,7 +134,7 @@ function buildDashboardPreview(): HTMLElement {
   selfPreview.className = 'tile__self-preview';
 
   const mark = document.createElement('img');
-  mark.src = chrome.runtime.getURL('src/assets/icon-128.png');
+  mark.src = logoMarkUrl;
   mark.alt = '';
   mark.draggable = false;
 
