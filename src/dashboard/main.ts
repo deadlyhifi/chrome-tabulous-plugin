@@ -117,7 +117,10 @@ pinViewButton.addEventListener('click', () => {
   void (async () => {
     const tab = await chrome.tabs.getCurrent();
     if (!tab?.id) return;
-    await chrome.tabs.update(tab.id, { pinned: !tab.pinned });
+    const pinned = !tab.pinned;
+    await chrome.tabs.update(tab.id, { pinned });
+    // Chrome pins in place otherwise; move it to lead the pinned group instead.
+    if (pinned) await chrome.tabs.move(tab.id, { index: 0 });
     await syncPinButton();
   })();
 });

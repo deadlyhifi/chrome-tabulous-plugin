@@ -66,7 +66,9 @@ async function openDashboard(windowId?: number): Promise<void> {
   } else {
     // Pinned from the start so the tab stays put at the edge of the strip instead of
     // landing among ordinary tabs, matching what the in-app pin button offers manually.
-    await chrome.tabs.create({ url, windowId, pinned: true });
+    const created = await chrome.tabs.create({ url, windowId, pinned: true });
+    // Chrome appends new pinned tabs after existing ones; force it to lead the pinned group.
+    if (created.id !== undefined) await chrome.tabs.move(created.id, { index: 0 });
   }
   run(captureAllWindows());
 }
