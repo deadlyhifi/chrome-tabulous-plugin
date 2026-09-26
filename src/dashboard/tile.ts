@@ -203,16 +203,23 @@ function buildPreview(tile: TileModel, ctx: TileContext): HTMLElement {
   pin.innerHTML = ICON_PIN;
   badges.append(pin);
 
-  // Not a button: dragging another tab and dropping it here pairs the two into Split
-  // View. Its own tab id is read from the ancestor `.tile` at drop time. Hidden entirely
-  // when the browser's Split View API (chrome 155+) isn't available.
+  // Not a badge: this is a strip covering the right ~40% of the preview (shown on hover,
+  // or solid while an eligible drag hovers it), previewing that the dropped tab will land
+  // on that side of the resulting Split View. Hidden entirely when the browser's Split
+  // View API (chrome 155+) isn't available. Hit-testing during drag is geometry-based in
+  // main.ts, so this stays pointer-events:none and never intercepts clicks.
   if (!tile.splitViewId && isSplitViewSupported()) {
-    const splitTarget = document.createElement('span');
-    splitTarget.className = 'badge tile__split-target';
-    splitTarget.title = 'Drop a tab here to open them together in Split View';
-    splitTarget.setAttribute('aria-hidden', 'true');
-    splitTarget.innerHTML = ICON_SPLIT;
-    badges.append(splitTarget);
+    const splitZone = document.createElement('div');
+    splitZone.className = 'tile__split-zone';
+    splitZone.setAttribute('aria-hidden', 'true');
+    const icon = document.createElement('span');
+    icon.className = 'tile__split-zone-icon';
+    icon.innerHTML = ICON_SPLIT;
+    const label = document.createElement('span');
+    label.className = 'tile__split-zone-label';
+    label.textContent = 'Split view';
+    splitZone.append(icon, label);
+    preview.append(splitZone);
   }
 
   const addBadge = (container: HTMLElement, svg: string, label: string): void => {
@@ -253,6 +260,15 @@ function buildPreview(tile: TileModel, ctx: TileContext): HTMLElement {
     chip.append(document.createTextNode(tile.group.title));
     preview.append(chip);
   }
+
+  // Labels the ordinary reorder drop target, distinct from the split-view strip on the
+  // right,
+  // so dragging a tab over this tile clearly reads as either one action or the other.
+  const dropHint = document.createElement('div');
+  dropHint.className = 'tile__drop-hint';
+  dropHint.setAttribute('aria-hidden', 'true');
+  dropHint.textContent = 'Move here';
+  preview.append(dropHint);
 
   return preview;
 }
@@ -316,6 +332,8 @@ export function renderTile(tile: TileModel, ctx: TileContext): HTMLLIElement {
   item.dataset.windowId = String(tile.windowId);
   item.dataset.active = String(tile.active);
   item.dataset.selected = String(ctx.selected);
+  // Read by main.ts's drag geometry check to decide whether the pointer's position counts.
+  item.dataset.splitEligible = String(!tile.splitViewId && isSplitViewSupported());
   item.tabIndex = 0;
   item.draggable = ctx.draggable;
   item.setAttribute('role', 'listitem');

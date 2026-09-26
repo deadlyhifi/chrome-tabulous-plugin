@@ -1179,6 +1179,9 @@ board.addEventListener('dragstart', (event) => {
   const tabId = Number(tile.dataset.tabId);
   dragIds = state.selected.has(tabId) ? [...state.selected] : [tabId];
   tile.dataset.dragging = 'true';
+  // Lights up every eligible tile's split-view strip for the duration of the drag, not just
+  // the one currently under the pointer, so the target is clear before reaching it.
+  if (dragIds.length === 1) board.dataset.singleDrag = 'true';
   event.dataTransfer?.setData('text/plain', String(tabId));
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move';
@@ -1199,10 +1202,14 @@ board.addEventListener('dragstart', (event) => {
 board.addEventListener('dragend', () => {
   dragIds = [];
   draggedGroup = undefined;
-  for (const el of board.querySelectorAll<HTMLElement>('[data-dragging], [data-drop-target]')) {
+  delete board.dataset.singleDrag;
+  for (const el of board.querySelectorAll<HTMLElement>(
+    '[data-dragging], [data-drop-target], [data-split-drop-target]',
+  )) {
     delete el.dataset.dragging;
     delete el.dataset.dropTarget;
     delete el.dataset.dropPosition;
+    delete el.dataset.splitDropTarget;
   }
   delete bulkNewWindowButton.dataset.dropTarget;
   if (bulkBarShownForDrag) {
@@ -1244,22 +1251,29 @@ board.addEventListener('dragover', (event) => {
 
   if (dragIds.length === 0) return;
 
-  // A single dragged tab hovering over another tile's split-target badge previews forming
-  // a Split View there, distinct from the ordinary reorder-by-dropping-on-a-tile behavior.
+  // A single dragged tab hovering over the split-view strip of an eligible tile previews
+  // forming a Split View there, distinct from the ordinary reorder-by-dropping behavior
+  // that dropping anywhere else on the same tile does.
   if (dragIds.length === 1) {
-    const splitTarget = (event.target as HTMLElement).closest<HTMLElement>('.tile__split-target');
-    if (splitTarget) {
-      const hostTile = splitTarget.closest<HTMLElement>('.tile');
-      const targetId = Number(hostTile?.dataset.tabId);
-      if (hostTile && Number.isFinite(targetId) && !dragIds.includes(targetId)) {
-        event.preventDefault();
-        if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
-        for (const el of board.querySelectorAll<HTMLElement>('[data-drop-target]')) {
-          delete el.dataset.dropTarget;
-        }
-        splitTarget.dataset.dropTarget = 'true';
-        return;
+    const hostTile = (event.target as HTMLElement).closest<HTMLElement>('.tile');
+    const targetId = Number(hostTile?.dataset.tabId);
+    if (
+      hostTile &&
+      hostTile.dataset.splitEligible === 'true' &&
+      Number.isFinite(targetId) &&
+      !dragIds.includes(targetId) &&
+      isInSplitZone(event, hostTile)
+    ) {
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+      for (const el of board.querySelectorAll<HTMLElement>(
+        '[data-drop-target], [data-split-drop-target]',
+      )) {
+        delete el.dataset.dropTarget;
+        delete el.dataset.splitDropTarget;
       }
+      hostTile.dataset.splitDropTarget = 'true';
+      return;
     }
   }
 
@@ -1269,8 +1283,11 @@ board.addEventListener('dragover', (event) => {
   if (!zone) return;
   event.preventDefault();
   if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
-  for (const el of board.querySelectorAll<HTMLElement>('[data-drop-target]')) {
+  for (const el of board.querySelectorAll<HTMLElement>(
+    '[data-drop-target], [data-split-drop-target]',
+  )) {
     delete el.dataset.dropTarget;
+    delete el.dataset.splitDropTarget;
   }
   zone.dataset.dropTarget = 'true';
 });
@@ -1300,23 +1317,22 @@ board.addEventListener('drop', (event) => {
   const ids = [...dragIds];
   dragIds = [];
 
-  // Dropping a single tab precisely onto another tile's split-target badge pairs the two
-  // into a Split View, instead of the ordinary reorder that dropping elsewhere on a tile does.
+  // Dropping a single tab on another eligible tile's split-view strip pairs the two into
+  // a Split View, instead of the ordinary reorder that dropping elsewhere on it does.
   if (ids.length === 1) {
-    const splitTarget = (event.target as HTMLElement).closest<HTMLElement>('.tile__split-target');
-    if (splitTarget) {
-      const hostTile = splitTarget.closest<HTMLElement>('.tile');
-      const targetId = Number(hostTile?.dataset.tabId);
-      const sourceId = ids[0];
-      if (
-        hostTile &&
-        Number.isFinite(targetId) &&
-        sourceId !== undefined &&
-        sourceId !== targetId
-      ) {
-        void splitTabs(sourceId, targetId);
-        return;
-      }
+    const hostTile = (event.target as HTMLElement).closest<HTMLElement>('.tile');
+    const targetId = Number(hostTile?.dataset.tabId);
+    const sourceId = ids[0];
+    if (
+      hostTile &&
+      hostTile.dataset.splitEligible === 'true' &&
+      Number.isFinite(targetId) &&
+      sourceId !== undefined &&
+      sourceId !== targetId &&
+      isInSplitZone(event, hostTile)
+    ) {
+      void splitTabs(sourceId, targetId);
+      return;
     }
   }
 
@@ -1379,6 +1395,16 @@ board.addEventListener('drop', (event) => {
 
 function targetIsGroupDropZone(target: EventTarget | null): boolean {
   return target instanceof HTMLElement && target.closest('.group-tile__drop') !== null;
+}
+
+/** True while the pointer sits over the right ~40% of the tile's preview, where the
+ *  split-view strip previews the dropped tab landing. */
+function isInSplitZone(event: DragEvent, tile: HTMLElement): boolean {
+  const preview = tile.querySelector<HTMLElement>('.tile__preview');
+  if (!preview) return false;
+  const rect = preview.getBoundingClientRect();
+  if (event.clientY < rect.top || event.clientY > rect.bottom) return false;
+  return (event.clientX - rect.left) / rect.width >= 0.6;
 }
 
 function groupReorderTarget(target: EventTarget | null): HTMLElement | null {

@@ -969,23 +969,66 @@ select {
   color: #fff;
 }
 
-/* A passive drop target (not a button): dim until the tile is hovered, and highlighted
-   while a single dragged tab is poised over it to form a Split View. */
-.tile__split-target {
-  opacity: 0.55;
+/* Covers the right ~40% of the preview, previewing that the dropped tab will land on
+   that side of the resulting Split View, rather than a small badge requiring pixel-
+   precise aim while dragging. Hidden until another tile is actually being dragged (not on
+   plain tile hover), so the strip only ever appears as a real drop target, never as idle
+   chrome. Pointer-events:none since main.ts hit-tests it by pointer geometry, not by
+   targeting this element directly. */
+.tile__split-zone {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
   transition:
     opacity var(--duration-fast) var(--ease-standard),
-    background var(--duration-fast) var(--ease-standard),
-    transform var(--duration-fast) var(--ease-standard);
+    background var(--duration-fast) var(--ease-standard);
 }
-.tile:hover .tile__split-target,
-.tile:focus-within .tile__split-target {
+.board[data-single-drag='true'] .tile[data-split-eligible='true'] .tile__split-zone {
   opacity: 1;
 }
-.tile__split-target[data-drop-target='true'] {
+.tile__split-zone-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.tile__split-zone-label {
+  font-size: var(--size-meta);
+  font-weight: 600;
+  text-align: center;
+}
+.tile[data-split-drop-target='true'] .tile__split-zone {
   opacity: 1;
   background: var(--accent);
-  transform: scale(1.15);
+}
+
+/* Labels the ordinary reorder drop target so it never reads as ambiguous with the split
+   corner above: a centered pill rather than just a bare dashed border. */
+.tile__drop-hint {
+  display: none;
+  position: absolute;
+  inset: auto 0 0 0;
+  margin: 0 auto var(--space-3);
+  width: max-content;
+  padding-block: 4px;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: #fff;
+  font-size: var(--size-meta);
+  font-weight: 600;
+  pointer-events: none;
+}
+.tile[data-drop-target='true']:not([data-split-drop-target='true']) .tile__drop-hint {
+  display: block;
 }
 
 /* Tab state (audio/muted/discarded/frozen) is informational, not a control, so it sits
