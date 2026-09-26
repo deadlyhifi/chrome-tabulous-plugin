@@ -215,18 +215,26 @@ function buildPreview(tile: TileModel, ctx: TileContext): HTMLElement {
     badges.append(splitTarget);
   }
 
-  const addBadge = (svg: string, label: string): void => {
+  const addBadge = (container: HTMLElement, svg: string, label: string): void => {
     const badge = document.createElement('span');
     badge.className = 'badge';
     badge.title = label;
     badge.setAttribute('aria-label', label);
     badge.innerHTML = svg;
-    badges.append(badge);
+    container.append(badge);
   };
-  if (tile.audible && !tile.muted) addBadge(ICON_AUDIO, 'Playing audio');
-  if (tile.muted) addBadge(ICON_MUTED, 'Muted');
-  if (tile.discarded || tile.frozen) addBadge(ICON_SLEEP, tile.frozen ? 'Frozen' : 'Discarded');
   preview.append(badges);
+
+  // Separate from the badges above: these describe tab state rather than offering an
+  // action, so they live in their own corner instead of crowding the interactive controls.
+  const status = document.createElement('div');
+  status.className = 'tile__status';
+  if (tile.audible && !tile.muted) addBadge(status, ICON_AUDIO, 'Playing audio');
+  if (tile.muted) addBadge(status, ICON_MUTED, 'Muted');
+  if (tile.discarded || tile.frozen) {
+    addBadge(status, ICON_SLEEP, tile.frozen ? 'Frozen' : 'Discarded');
+  }
+  if (status.childElementCount > 0) preview.append(status);
 
   const close = document.createElement('button');
   close.type = 'button';

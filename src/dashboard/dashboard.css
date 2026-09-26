@@ -669,8 +669,8 @@ select {
   display: grid;
   flex: none;
   place-items: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   padding: 0;
   border: 1px solid var(--hairline);
   border-radius: var(--radius-control);
@@ -680,8 +680,8 @@ select {
 }
 
 .split-tile__action svg {
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
 }
 
 .split-tile__action:hover {
@@ -794,8 +794,8 @@ select {
   inset-inline-end: var(--space-2);
   display: grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -807,8 +807,8 @@ select {
 }
 
 .tile__close svg {
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
 }
 
 .tile:hover .tile__close,
@@ -821,14 +821,14 @@ select {
   inset-block-start: var(--space-2);
   inset-inline-start: var(--space-2);
   display: flex;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
 .badge {
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.55);
   color: #fff;
@@ -836,8 +836,8 @@ select {
 }
 
 .badge svg {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 .tile__pin {
   padding: 0;
@@ -849,7 +849,7 @@ select {
 }
 /* Unpinned tabs only hint at the affordance until the tile is hovered or focused. */
 .tile__pin[data-pinned='false'] {
-  opacity: 0;
+  opacity: 0.55;
   background: rgba(0, 0, 0, 0.3);
   color: rgba(255, 255, 255, 0.75);
 }
@@ -865,19 +865,19 @@ select {
 }
 
 /* Square rather than round, so it reads as a checkbox rather than another status badge.
-   Faint until hovered/focused, but the whole board lights every tile's box up as soon as
+   Dim until hovered/focused, but the whole board lights every tile's box up as soon as
    one is selected, so multi-select stays legible while it's in use. */
 .tile__select {
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   padding: 0;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1.5px solid rgba(255, 255, 255, 0.85);
   background: rgba(0, 0, 0, 0.3);
   color: transparent;
-  opacity: 0;
+  opacity: 0.55;
   cursor: pointer;
   transition:
     opacity var(--duration-fast) var(--ease-standard),
@@ -886,8 +886,8 @@ select {
     color var(--duration-fast) var(--ease-standard);
 }
 .tile__select svg {
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
 }
 .tile:hover .tile__select,
 .tile:focus-within .tile__select,
@@ -905,10 +905,10 @@ select {
   color: #fff;
 }
 
-/* A passive drop target (not a button): faint until the tile is hovered, and highlighted
+/* A passive drop target (not a button): dim until the tile is hovered, and highlighted
    while a single dragged tab is poised over it to form a Split View. */
 .tile__split-target {
-  opacity: 0;
+  opacity: 0.55;
   transition:
     opacity var(--duration-fast) var(--ease-standard),
     background var(--duration-fast) var(--ease-standard),
@@ -922,6 +922,16 @@ select {
   opacity: 1;
   background: var(--accent);
   transform: scale(1.15);
+}
+
+/* Tab state (audio/muted/discarded/frozen) is informational, not a control, so it sits
+   opposite the interactive badges rather than mixed in among them. */
+.tile__status {
+  position: absolute;
+  inset-block-end: var(--space-2);
+  inset-inline-end: var(--space-2);
+  display: flex;
+  gap: var(--space-2);
 }
 
 .tile__body {
@@ -972,8 +982,8 @@ select {
   flex: none;
   display: grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -988,8 +998,8 @@ select {
 }
 
 .tile__disclosure svg {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   transition: transform var(--duration-base) var(--ease-standard);
 }
 
