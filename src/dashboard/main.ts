@@ -37,6 +37,7 @@ const sortKeySelect = document.getElementById('sort-key') as HTMLSelectElement;
 const themeSelect = document.getElementById('theme') as HTMLSelectElement;
 const bulkBar = document.getElementById('bulk-bar') as HTMLElement;
 const bulkCount = document.getElementById('bulk-count') as HTMLElement;
+const bulkSplitButton = document.getElementById('bulk-split') as HTMLButtonElement;
 const bulkNewWindowButton = document.getElementById('bulk-new-window') as HTMLButtonElement;
 const permissionBar = document.getElementById('permission-bar') as HTMLElement;
 const permissionText = document.getElementById('permission-text') as HTMLElement;
@@ -820,6 +821,7 @@ function renderBulkBar(): void {
   const count = state.selected.size;
   bulkBar.hidden = count === 0;
   bulkCount.textContent = `${count} selected`;
+  bulkSplitButton.hidden = !(count === 2 && isSplitViewSupported());
 }
 
 /* ---------------- Preferences ---------------- */
@@ -1574,6 +1576,16 @@ document.getElementById('bulk-group')?.addEventListener('click', () => {
     }
     state.selected.clear();
     scheduleRefresh();
+  })();
+});
+
+document.getElementById('bulk-split')?.addEventListener('click', () => {
+  void (async () => {
+    const [sourceId, targetId] = [...state.selected];
+    if (sourceId === undefined || targetId === undefined) return;
+    await splitTabs(sourceId, targetId);
+    state.selected.clear();
+    render();
   })();
 });
 
